@@ -1,11 +1,8 @@
 package com.edu.ulab.app.web;
 
-import com.edu.ulab.app.exception.IncorrectRequestException;
 import com.edu.ulab.app.facade.UserDataFacade;
 import com.edu.ulab.app.web.constant.WebConstant;
-import com.edu.ulab.app.web.request.BookRequest;
 import com.edu.ulab.app.web.request.UserBookRequest;
-import com.edu.ulab.app.web.request.UserRequest;
 import com.edu.ulab.app.web.response.UserBookResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,6 +59,6 @@ public class UserController {
     @DeleteMapping(value = "/delete/{userId}")
     public void deleteUserWithBooks(@PathVariable Long userId) {
         log.info("Delete user and his books:  userId {}", userId);
-        userDataFacade.deleteUserWithBooks(userId);
+        userDataFacade.deleteUserWithBooksById(userId);
     }
 }

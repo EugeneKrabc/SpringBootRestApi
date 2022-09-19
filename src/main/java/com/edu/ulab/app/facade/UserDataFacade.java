@@ -9,7 +9,6 @@ import com.edu.ulab.app.service.BookService;
 import com.edu.ulab.app.service.UserService;
 import com.edu.ulab.app.web.request.BookRequest;
 import com.edu.ulab.app.web.request.UserBookRequest;
-import com.edu.ulab.app.web.request.UserRequest;
 import com.edu.ulab.app.web.response.UserBookResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -74,8 +73,8 @@ public class UserDataFacade {
                 .build();
     }
 
-    public void deleteUserWithBooks(Long userId) {
-        userService.deleteUserById(userId);
+    public void deleteUserWithBooksById(Long userId) {
+        userService.deleteUserWithBooksById(userId);
     }
 
     private List<Long> saveBooksToUser(List<BookRequest> bookRequests, long userId) {

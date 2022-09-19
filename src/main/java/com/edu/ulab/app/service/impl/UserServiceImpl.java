@@ -2,8 +2,9 @@ package com.edu.ulab.app.service.impl;
 
 import com.edu.ulab.app.dto.UserDto;
 import com.edu.ulab.app.exception.IncorrectDataException;
+import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.service.UserService;
-import com.edu.ulab.app.storage.Storage;
+import com.edu.ulab.app.storage.StorageDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,38 +12,52 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-    Storage storage;
+    StorageDAO storageDAO;
+
+    UserMapper userMapper;
 
     @Autowired
-    public void setStorage(Storage storage) {
-        this.storage = storage;
+    public void setStorageDAO(StorageDAO storageDAO) {
+        this.storageDAO = storageDAO;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        checkCorrectUserDto(userDto);
-        userDto.setId(storage.saveUser(userDto));
+        checkCorrectDataInUserDto(userDto);
+
+        Long savedUserId = storageDAO.saveUser(userMapper.userDtoToUserEntity(userDto));
+        userDto.setId(savedUserId);
+
+        return userDto;
+    }
+
+    @Override
+    public UserDto getUserById(Long userId) {
+        UserDto userDto = userMapper.userEntityToUserDto(storageDAO.getUserById(userId));
+        userDto.setId(userId);
         return userDto;
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, Long userId) {
-        checkCorrectUserDto(userDto);
-        storage.updateUser(userDto, userId);
-        return storage.getUserById(userId);
+        checkCorrectDataInUserDto(userDto);
+
+        storageDAO.updateUser(userMapper.userDtoToUserEntity(userDto), userId);
+
+        return getUserById(userId);
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
-        return storage.getUserById(userId);
+    public void deleteUserWithBooksById(Long userId) {
+        storageDAO.deleteUserWithBooksById(userId);
     }
 
-    @Override
-    public void deleteUserById(Long userId) {
-        storage.deleteUserWithBooksById(userId);
-    }
-
-    private void checkCorrectUserDto(UserDto userDto) {
+    private void checkCorrectDataInUserDto(UserDto userDto) {
         if (userDto.getFullName() == null || userDto.getFullName().length() == 0) {
             throw new IncorrectDataException("User name is null or empty");
         }
@@ -55,6 +70,4 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectDataException("Invalid user age = " + userDto.getAge());
         }
     }
-
-
 }

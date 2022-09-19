@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class BookEntity {
-    private final String title;
-    private final String author;
-    private final long pageCount;
-    private final Long userId;
+    private String title;
+    private String author;
+    private long pageCount;
+    private Long userId;
 }
