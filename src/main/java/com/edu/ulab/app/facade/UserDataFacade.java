@@ -53,9 +53,13 @@ public class UserDataFacade {
     }
 
     public UserBookResponse updateUserWithBooks(UserBookRequest userBookRequest, Long userId) {
+        log.info("Get user book update request: {}", userBookRequest);
+
         checkCorrectRequest(userBookRequest);
         UserDto userDto = userMapper.userRequestToUserDto(userBookRequest.getUserRequest());
         UserDto updatedUser = userService.updateUser(userDto, userId);
+
+        log.info("Updated user: {}", updatedUser);
 
         List<Long> bookIdList = saveBooksToUser(userBookRequest.getBookRequests(), userId);
 
@@ -66,6 +70,7 @@ public class UserDataFacade {
     }
 
     public UserBookResponse getUserWithBooks(Long userId) {
+        log.info("Get user by id request: {}", userId);
         List<Long> booksIdList = bookService.getBookIdListByUserId(userId);
         return UserBookResponse.builder()
                 .userId(userId)
@@ -74,11 +79,13 @@ public class UserDataFacade {
     }
 
     public void deleteUserWithBooksById(Long userId) {
+        log.info("Get user delete request: {}", userId);
         userService.deleteUserWithBooksById(userId);
     }
 
     private List<Long> saveBooksToUser(List<BookRequest> bookRequests, long userId) {
         if (bookRequests == null) {
+            log.info("Request with empty book requests list, creating empty book ids");
             return new ArrayList<Long>();
         }
 
