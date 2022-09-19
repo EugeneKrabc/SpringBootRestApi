@@ -26,25 +26,26 @@ public class Storage {
     private static long uniqBookId = 1;
 
     public Long saveUser(UserDto userDto) {
-        long savedUserId = uniqUserId++;
+        long userId = uniqUserId++;
 
-        users.put(savedUserId,
-                new UserEntity(userDto.getFullName(), userDto.getTitle(), userDto.getAge()));
+        UserEntity userEntity = new UserEntity(userDto.getFullName(), userDto.getTitle(), userDto.getAge());
 
-        return savedUserId;
+        users.put(userId, userEntity);
+
+        return userId;
     }
 
     public long saveBook(BookDto bookDto) {
-        long savedBookId = uniqBookId++;
+        long bookId = uniqBookId++;
         long userId = bookDto.getUserId();
 
-        BookEntity book = new BookEntity(
-                bookDto.getTitle(), bookDto.getAuthor(), bookDto.getPageCount(), userId
-        );
-        books.put(savedBookId, book);
+        BookEntity bookEntity = new BookEntity(
+                bookDto.getTitle(), bookDto.getAuthor(), bookDto.getPageCount(), bookDto.getUserId());
 
-        users.get(userId).addBookId(savedBookId);
-        return savedBookId;
+        books.put(bookId, bookEntity);
+
+        users.get(userId).getBookIdSet().add(bookId);
+        return bookId;
     }
 
     public List<Long> getBookIdListByUserId(Long userId) {
@@ -69,6 +70,20 @@ public class Storage {
         removeBooksByUserId(userId);
 
         users.remove(userId);
+    }
+
+    public UserDto getUserById(Long userId) {
+        checkIfUserPresent(userId);
+
+        UserEntity userEntity = users.get(userId);
+        UserDto userDto = new UserDto();
+
+        userDto.setId(userId);
+        userDto.setFullName(userEntity.getFullName());
+        userDto.setTitle(userEntity.getTitle());
+        userDto.setAge(userEntity.getAge());
+
+        return userDto;
     }
 
     private void removeBooksByUserId(Long userId) {

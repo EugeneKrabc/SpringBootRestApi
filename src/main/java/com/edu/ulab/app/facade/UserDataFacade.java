@@ -2,16 +2,19 @@ package com.edu.ulab.app.facade;
 
 import com.edu.ulab.app.dto.BookDto;
 import com.edu.ulab.app.dto.UserDto;
+import com.edu.ulab.app.exception.IncorrectRequestException;
 import com.edu.ulab.app.mapper.BookMapper;
 import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.service.BookService;
 import com.edu.ulab.app.service.UserService;
 import com.edu.ulab.app.web.request.BookRequest;
 import com.edu.ulab.app.web.request.UserBookRequest;
+import com.edu.ulab.app.web.request.UserRequest;
 import com.edu.ulab.app.web.response.UserBookResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +37,7 @@ public class UserDataFacade {
     }
 
     public UserBookResponse createUserWithBooks(UserBookRequest userBookRequest) {
+        checkCorrectRequest(userBookRequest);
         log.info("Got user book create request: {}", userBookRequest);
         UserDto userDto = userMapper.userRequestToUserDto(userBookRequest.getUserRequest());
         log.info("Mapped user request: {}", userDto);
@@ -50,6 +54,7 @@ public class UserDataFacade {
     }
 
     public UserBookResponse updateUserWithBooks(UserBookRequest userBookRequest, Long userId) {
+        checkCorrectRequest(userBookRequest);
         UserDto userDto = userMapper.userRequestToUserDto(userBookRequest.getUserRequest());
         UserDto updatedUser = userService.updateUser(userDto, userId);
 
@@ -74,6 +79,10 @@ public class UserDataFacade {
     }
 
     private List<Long> saveBooksToUser(List<BookRequest> bookRequests, long userId) {
+        if (bookRequests == null) {
+            return new ArrayList<Long>();
+        }
+
         List<Long> bookIdList = bookRequests
                 .stream()
                 .filter(Objects::nonNull)
@@ -86,5 +95,15 @@ public class UserDataFacade {
                 .toList();
         log.info("Collected book ids: {}", bookIdList);
         return bookIdList;
+    }
+
+    private void checkCorrectRequest(UserBookRequest userBookRequest) {
+        if (userBookRequest == null) {
+            throw new IncorrectRequestException("UserBook request is null");
+        }
+
+        if (userBookRequest.getUserRequest() == null) {
+            throw new IncorrectRequestException("User request is null");
+        }
     }
 }

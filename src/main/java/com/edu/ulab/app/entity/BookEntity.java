@@ -1,15 +1,12 @@
 package com.edu.ulab.app.entity;
 
-public class BookEntity {
-    private String title;
-    private String author;
-    private long pageCount;
-    private Long userId;
+import lombok.Data;
 
-    public BookEntity(String title, String author, long pageCount, Long userId) {
-        this.title = title;
-        this.author = author;
-        this.pageCount = pageCount;
-        this.userId = userId;
-    }
+
+@Data
+public class BookEntity {
+    private final String title;
+    private final String author;
+    private final long pageCount;
+    private final Long userId;
 }

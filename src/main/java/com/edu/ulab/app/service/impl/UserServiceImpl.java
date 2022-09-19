@@ -1,7 +1,7 @@
 package com.edu.ulab.app.service.impl;
 
 import com.edu.ulab.app.dto.UserDto;
-import com.edu.ulab.app.entity.UserEntity;
+import com.edu.ulab.app.exception.IncorrectDataException;
 import com.edu.ulab.app.service.UserService;
 import com.edu.ulab.app.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
@@ -20,32 +20,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        checkCorrectUserDto(userDto);
         userDto.setId(storage.saveUser(userDto));
         return userDto;
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, Long userId) {
+        checkCorrectUserDto(userDto);
         storage.updateUser(userDto, userId);
-        userDto.setId(userId);
-        return userDto;
+        return storage.getUserById(userId);
     }
 
     @Override
     public UserDto getUserById(Long userId) {
-//        UserEntity userWithBooks = storage.findUserById(userId);
-//        UserDto userDto = new UserDto();
-//
-//        userDto.setFullName(userWithBooks.getFullName());
-//        userDto.setTitle(userWithBooks.getTitle());
-//        userDto.setAge(userWithBooks.getAge());
-//        userDto.setId(userId);
-
-        return null;
+        return storage.getUserById(userId);
     }
 
     @Override
-    public void deleteUserById(Long id) {
-        storage.deleteUserWithBooksById(id);
+    public void deleteUserById(Long userId) {
+        storage.deleteUserWithBooksById(userId);
     }
+
+    private void checkCorrectUserDto(UserDto userDto) {
+        if (userDto.getFullName() == null || userDto.getFullName().length() == 0) {
+            throw new IncorrectDataException("User name is null or empty");
+        }
+
+        if (userDto.getTitle() == null || userDto.getTitle().length() == 0) {
+            throw new IncorrectDataException("User title is null or empty");
+        }
+
+        if (userDto.getAge() <= 0) {
+            throw new IncorrectDataException("Invalid user age = " + userDto.getAge());
+        }
+    }
+
+
 }

@@ -26,12 +26,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(BookDto bookDto) {
-        return null;
-    }
-
-    @Override
     public BookDto getBookById(Long id) {
+        // TODO
         return null;
     }
 
@@ -42,6 +38,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookById(Long id) {
-
+        // TODO
     }
 }
