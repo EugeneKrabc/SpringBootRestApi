@@ -69,9 +69,28 @@ public class CacheStorage implements StorageDAO {
         return users.get(userId);
     }
 
+    @Override
+    public BookEntity getBookByID(Long bookId) {
+        checkIfBookPresent(bookId);
+        return books.get(bookId);
+    }
+
+    @Override
+    public void deleteBookById(Long BookId) {
+        checkIfBookPresent(BookId);
+        books.remove(BookId);
+
+    }
+
     private void checkIfUserPresent(Long userId) {
         if (!users.containsKey(userId)) {
             throw new NotFoundException("There is no user with id = " + userId);
+        }
+    }
+
+    private void checkIfBookPresent(Long bookId) {
+        if (!books.containsKey(bookId)) {
+            throw new NotFoundException("There is no book with id = " + bookId);
         }
     }
 

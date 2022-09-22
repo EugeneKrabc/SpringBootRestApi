@@ -41,4 +41,16 @@ public class BookServiceImpl implements BookService {
         return storageDAO.getBookIdListByUserId(userId);
     }
 
+    @Override
+    public BookDto getBookById(Long bookId) {
+        BookDto bookDto = bookMapper.bookEntityToBookDto(storageDAO.getBookByID(bookId));
+        bookDto.setId(bookId);
+        return bookDto;
+    }
+
+    @Override
+    public void deleteBookById(Long bookId) {
+        storageDAO.deleteBookById(bookId);
+    }
+
 }

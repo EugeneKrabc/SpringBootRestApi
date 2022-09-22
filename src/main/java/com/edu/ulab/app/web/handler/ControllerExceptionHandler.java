@@ -17,21 +17,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<BaseWebResponse> handleNotFoundExceptionException(@NonNull final NotFoundException exc) {
+    public ResponseEntity<BaseWebResponse> handleNotFoundException(@NonNull final NotFoundException exc) {
         log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseWebResponse(createErrorMessage(exc)));
     }
 
     @ExceptionHandler(IncorrectDataException.class)
-    public ResponseEntity<BaseWebResponse> handleNotFoundExceptionException(@NonNull final IncorrectDataException exc) {
+    public ResponseEntity<BaseWebResponse> handleIncorrectDataException(@NonNull final IncorrectDataException exc) {
         log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseWebResponse(createErrorMessage(exc)));
     }
 
     @ExceptionHandler(IncorrectRequestException.class)
-    public ResponseEntity<BaseWebResponse> handleNotFoundExceptionException(@NonNull final IncorrectRequestException exc) {
+    public ResponseEntity<BaseWebResponse> handleIncorrectRequestException(@NonNull final IncorrectRequestException exc) {
         log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseWebResponse(createErrorMessage(exc)));

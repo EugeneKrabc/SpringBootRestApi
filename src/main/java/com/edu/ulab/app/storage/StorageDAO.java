@@ -12,4 +12,7 @@ public interface StorageDAO {
     void updateUser(UserEntity userEntity, Long userId);
     void deleteUserWithBooksById(Long userId);
     UserEntity getUserById(Long userId);
+    BookEntity getBookByID(Long bookId);
+    void deleteBookById(Long BookId);
+
 }
