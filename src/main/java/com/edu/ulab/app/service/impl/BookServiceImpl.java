@@ -8,6 +8,8 @@ import com.edu.ulab.app.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class BookServiceImpl implements BookService {
@@ -32,9 +34,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(BookDto bookDto) {
+    public void updateBook(BookDto bookDto) {
         // реализовать недстающие методы
-        return null;
     }
 
     @Override
@@ -46,5 +47,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBookById(Long id) {
         // реализовать недстающие методы
+    }
+
+    public List<Long> getBookIdListForUser(Long personId) {
+        return null;
+    }
+
+    public void deleteBooksWithUserId(Long userId) {
+        return;
     }
 }

@@ -1,6 +1,6 @@
 package com.edu.ulab.app.service.impl;
 
-import com.edu.ulab.app.dto.UserDto;
+import com.edu.ulab.app.dto.PersonDto;
 import com.edu.ulab.app.entity.Person;
 import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.repository.UserRepository;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
+    public PersonDto createUser(PersonDto userDto) {
         Person user = userMapper.userDtoToPerson(userDto);
         log.info("Mapped user: {}", user);
         Person savedUser = userRepository.save(user);
@@ -31,13 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
+    public void updateUser(PersonDto userDto) {
         // реализовать недстающие методы
-        return null;
     }
 
     @Override
-    public UserDto getUserById(Long id) {
+    public PersonDto getUserById(Long id) {
         // реализовать недстающие методы
         return null;
     }
