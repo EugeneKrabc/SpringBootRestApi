@@ -1,15 +1,15 @@
 package com.edu.ulab.app.service;
 
-import com.edu.ulab.app.dto.PersonDto;
+import com.edu.ulab.app.dto.UserDto;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserService {
-    PersonDto createUser(PersonDto userDto);
+    UserDto createUser(UserDto userDto);
 
-    void updateUser(PersonDto userDto);
+    void updateUser(UserDto userDto);
 
-    PersonDto getUserById(Long id);
+    UserDto getUserById(Long id);
 
     void deleteUserById(Long id);
 }

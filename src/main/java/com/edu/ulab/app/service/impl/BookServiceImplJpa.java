@@ -12,14 +12,14 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class BookServiceImpl implements BookService {
+public class BookServiceImplJpa implements BookService {
 
     private final BookRepository bookRepository;
 
     private final BookMapper bookMapper;
 
-    public BookServiceImpl(BookRepository bookRepository,
-                           BookMapper bookMapper) {
+    public BookServiceImplJpa(BookRepository bookRepository,
+                              BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
     }
@@ -35,25 +35,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void updateBook(BookDto bookDto) {
-        // реализовать недстающие методы
+        bookRepository.save(bookMapper.bookDtoToBook(bookDto));
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        // реализовать недстающие методы
-        return null;
+        return bookMapper.bookToBookDto(bookRepository.findById(id).orElse(null));
     }
 
     @Override
     public void deleteBookById(Long id) {
-        // реализовать недстающие методы
+        bookRepository.deleteById(id);
     }
 
-    public List<Long> getBookIdListForUser(Long personId) {
-        return null;
+    public List<Long> getBookIdListForUser(Long userId) {
+        return bookRepository.getBookIdListWithUserId(userId).stream().toList();
     }
 
     public void deleteBooksWithUserId(Long userId) {
-        return;
+        bookRepository.deleteByUserId(userId);
     }
 }

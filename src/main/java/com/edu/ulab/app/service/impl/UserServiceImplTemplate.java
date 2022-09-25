@@ -1,7 +1,7 @@
 package com.edu.ulab.app.service.impl;
 
 import com.edu.ulab.app.dao.PersonDAO;
-import com.edu.ulab.app.dto.PersonDto;
+import com.edu.ulab.app.dto.UserDto;
 import com.edu.ulab.app.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,18 +17,18 @@ public class UserServiceImplTemplate implements UserService {
     }
 
     @Override
-    public PersonDto createUser(PersonDto personDto) {
-        personDto.setId(personDAO.savePerson(personDto));
-        return personDto;
+    public UserDto createUser(UserDto userDto) {
+        userDto.setId(personDAO.savePerson(userDto));
+        return userDto;
     }
 
     @Override
-    public void updateUser(PersonDto userDto) {
+    public void updateUser(UserDto userDto) {
         personDAO.updateUser(userDto);
     }
 
     @Override
-    public PersonDto getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         return personDAO.getUserById(id);
     }
 
