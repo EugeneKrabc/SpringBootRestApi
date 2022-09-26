@@ -1,6 +1,7 @@
 package com.edu.ulab.app.dao;
 
 import com.edu.ulab.app.dto.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
+@Slf4j
 @Component
 public class PersonDAO {
     private final JdbcTemplate jdbcTemplate;
@@ -29,12 +31,14 @@ public class PersonDAO {
                     ps.setLong(3, userDto.getAge());
                     return ps;
                 }, keyHolder);
-
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        log.info("Save user into bd, id = {}", id);
+        return id;
     }
 
     public void deleteUser(Long id) {
-        jdbcTemplate.update("DELETE FROM PERSON WHERE ID = ?", id);
+        int amount = jdbcTemplate.update("DELETE FROM PERSON WHERE ID = ?", id);
+        log.info("Number of deleted books from bd: {}", amount);
     }
 
     public UserDto getUserById(Long id) {
@@ -44,7 +48,8 @@ public class PersonDAO {
     }
 
     public void updateUser(UserDto userDto) {
-        jdbcTemplate.update("UPDATE PERSON SET FULL_NAME = ?, TITLE = ?, AGE = ? WHERE ID = ?",
+        int amount = jdbcTemplate.update("UPDATE PERSON SET FULL_NAME = ?, TITLE = ?, AGE = ? WHERE ID = ?",
                 userDto.getFullName(), userDto.getTitle(), userDto.getAge(), userDto.getId());
+        log.info("Update query return: {}", amount);
     }
 }

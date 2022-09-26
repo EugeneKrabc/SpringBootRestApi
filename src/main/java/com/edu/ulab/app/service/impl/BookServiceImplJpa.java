@@ -35,12 +35,18 @@ public class BookServiceImplJpa implements BookService {
 
     @Override
     public void updateBook(BookDto bookDto) {
-        bookRepository.save(bookMapper.bookDtoToBook(bookDto));
+        Book book = bookMapper.bookDtoToBook(bookDto);
+        log.info("Mapped book: {}", book);
+        bookRepository.save(book);
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        return bookMapper.bookToBookDto(bookRepository.findById(id).orElse(null));
+        Book book = bookRepository.findById(id).orElse(null);
+        log.info("Received book from repository: {}", book);
+        BookDto bookDto = bookMapper.bookToBookDto(book);
+        log.info("Mapped book: {}", bookDto);
+        return bookDto;
     }
 
     @Override
@@ -49,6 +55,8 @@ public class BookServiceImplJpa implements BookService {
     }
 
     public List<Long> getBookIdListForUser(Long userId) {
+        List<Long> bookIdList = bookRepository.getBookIdListWithUserId(userId).stream().toList();
+        log.info("Received book id list from repository: {}", bookIdList);
         return bookRepository.getBookIdListWithUserId(userId).stream().toList();
     }
 

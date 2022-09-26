@@ -40,8 +40,9 @@ public class BookDAO {
                     }
                 },
                 keyHolder);
-
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        log.info("Save user into bd, id = {}", id);
+        return id;
     }
 
     public List<Long> getBooksWithThisUserId(Long userId) {
@@ -50,15 +51,17 @@ public class BookDAO {
     }
 
     public void deleteBooksWithThisUserId(Long userId) {
-        jdbcTemplate.update("DELETE FROM BOOK WHERE USER_ID = ?", userId);
+        int amount = jdbcTemplate.update("DELETE FROM BOOK WHERE USER_ID = ?", userId);
+        log.info("Number of deleted books from bd: {}", amount);
     }
 
     public void updateBook(BookDto bookDto) {
-        jdbcTemplate.update(
+        int amount = jdbcTemplate.update(
                 "UPDATE BOOK SET TITLE = ?, AUTHOR = ?, PAGE_COUNT = ?, USER_ID = ?, ID = ?",
                 bookDto.getTitle(), bookDto.getAuthor(), bookDto.getPageCount(),
                 bookDto.getUserId(), bookDto.getId()
         );
+        log.info("Update query return: {}", amount);
     }
 
     public BookDto getBookByBookId(Long id) {
@@ -68,6 +71,7 @@ public class BookDAO {
     }
 
     public void deleteBookById(Long id) {
-        jdbcTemplate.update("DELETE FROM BOOK WHERE ID = ?", id);
+        int amount = jdbcTemplate.update("DELETE FROM BOOK WHERE ID = ?", id);
+        log.info("Update query return: {}", amount);
     }
 }

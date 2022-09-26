@@ -2,7 +2,6 @@ package com.edu.ulab.app.service.impl;
 
 import com.edu.ulab.app.dto.UserDto;
 import com.edu.ulab.app.entity.Person;
-import com.edu.ulab.app.exception.IncorrectDataException;
 import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.repository.UserRepository;
 import com.edu.ulab.app.service.UserService;
@@ -24,7 +23,6 @@ public class UserServiceImplJpa implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        checkCorrectDataInUserDto(userDto);
         Person user = userMapper.userDtoToPerson(userDto);
         log.info("Mapped user: {}", user);
         Person savedUser = userRepository.save(user);
@@ -34,31 +32,22 @@ public class UserServiceImplJpa implements UserService {
 
     @Override
     public void updateUser(UserDto userDto) {
-        checkCorrectDataInUserDto(userDto);
-        userRepository.save(userMapper.userDtoToPerson(userDto));
+        Person user = userMapper.userDtoToPerson(userDto);
+        log.info("Mapped user: {}", user);
+        userRepository.save(user);
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        return userMapper.personToUserDto(userRepository.findById(id).orElse(null));
+        Person user = userRepository.findById(id).orElse(null);
+        log.info("Received user from repository: {}", user);
+        UserDto userDto = userMapper.personToUserDto(user);
+        log.info("Mapped userDto: {}", userDto);
+        return userDto;
     }
 
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
-    }
-
-    private void checkCorrectDataInUserDto(UserDto userDto) {
-        if (userDto.getFullName() == null || userDto.getFullName().length() == 0) {
-            throw new IncorrectDataException("User name is null or empty");
-        }
-
-        if (userDto.getTitle() == null || userDto.getTitle().length() == 0) {
-            throw new IncorrectDataException("User title is null or empty");
-        }
-
-        if (userDto.getAge() <= 0) {
-            throw new IncorrectDataException("Invalid user age = " + userDto.getAge());
-        }
     }
 }

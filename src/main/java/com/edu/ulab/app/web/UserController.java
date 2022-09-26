@@ -72,7 +72,7 @@ public class UserController {
     @Operation(summary = "Delete user and user's books.")
     public void deleteUserWithBooks(@PathVariable Long userId,
                                     @RequestHeader(RQID) @Pattern(regexp = REQUEST_ID_PATTERN) final String requestId) {
-        log.info("Delete user and his books:  userId {}", userId);
+        log.info("Delete user and his books request:  userId {}", userId);
         userDataFacade.deleteUserWithBooks(userId);
     }
 }

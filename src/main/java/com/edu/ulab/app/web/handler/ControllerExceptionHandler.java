@@ -1,6 +1,5 @@
 package com.edu.ulab.app.web.handler;
 
-import com.edu.ulab.app.exception.IncorrectDataException;
 import com.edu.ulab.app.exception.IncorrectRequestException;
 import com.edu.ulab.app.exception.NotFoundException;
 import com.edu.ulab.app.web.response.BaseWebResponse;
@@ -18,13 +17,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<BaseWebResponse> handleNotFoundExceptionException(@NonNull final NotFoundException exc) {
-        log.error(exc.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new BaseWebResponse(createErrorMessage(exc)));
-    }
-
-    @ExceptionHandler(IncorrectDataException.class)
-    public ResponseEntity<BaseWebResponse> handleIncorrectDataException(@NonNull final IncorrectDataException exc) {
         log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseWebResponse(createErrorMessage(exc)));
