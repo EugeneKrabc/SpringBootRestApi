@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImplJpa implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           UserMapper userMapper) {
+    public UserServiceImplJpa(UserRepository userRepository,
+                              UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
@@ -31,19 +31,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        // реализовать недстающие методы
-        return null;
+    public void updateUser(UserDto userDto) {
+        Person user = userMapper.userDtoToPerson(userDto);
+        log.info("Mapped user: {}", user);
+        userRepository.save(user);
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        // реализовать недстающие методы
-        return null;
+        Person user = userRepository.findById(id).orElse(null);
+        log.info("Received user from repository: {}", user);
+        UserDto userDto = userMapper.personToUserDto(user);
+        log.info("Mapped userDto: {}", userDto);
+        return userDto;
     }
 
     @Override
     public void deleteUserById(Long id) {
-        // реализовать недстающие методы
+        userRepository.deleteById(id);
     }
 }
