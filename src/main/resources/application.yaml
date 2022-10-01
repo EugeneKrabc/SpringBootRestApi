@@ -2,14 +2,23 @@ swagger-api:
   version: "1.0"
 
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
   datasource:
-    url: jdbc:h2:mem:userbook
-    username: test
-    password: test
+    url: jdbc:postgresql://localhost:5432/ulab_db
+    username: some_user
+    password: some_password
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
   port: 8091
