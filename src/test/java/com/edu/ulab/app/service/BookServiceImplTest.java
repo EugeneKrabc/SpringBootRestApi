@@ -5,7 +5,7 @@ import com.edu.ulab.app.entity.Book;
 import com.edu.ulab.app.entity.Person;
 import com.edu.ulab.app.mapper.BookMapper;
 import com.edu.ulab.app.repository.BookRepository;
-import com.edu.ulab.app.service.impl.BookServiceImpl;
+import com.edu.ulab.app.service.impl.BookServiceImplJpa;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
- * Тестирование функционала {@link com.edu.ulab.app.service.impl.BookServiceImpl}.
+ * Тестирование функционала {@link com.edu.ulab.app.service.impl.BookServiceImplJpa}.
  */
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @DisplayName("Testing book functionality.")
 public class BookServiceImplTest {
     @InjectMocks
-    BookServiceImpl bookService;
+    BookServiceImplJpa bookService;
 
     @Mock
     BookRepository bookRepository;
@@ -57,14 +57,14 @@ public class BookServiceImplTest {
         book.setPageCount(1000);
         book.setTitle("test title");
         book.setAuthor("test author");
-        book.setPerson(person);
+        book.setUserId(person.getId());
 
         Book savedBook = new Book();
         savedBook.setId(1L);
         savedBook.setPageCount(1000);
         savedBook.setTitle("test title");
         savedBook.setAuthor("test author");
-        savedBook.setPerson(person);
+        savedBook.setUserId(person.getId());
 
         //when
 

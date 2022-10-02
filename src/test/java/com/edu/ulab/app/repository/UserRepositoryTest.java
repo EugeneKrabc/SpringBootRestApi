@@ -36,15 +36,15 @@ public class UserRepositoryTest {
     void insertPerson_thenAssertDmlCount() {
         //Given
         Person person = new Person();
-        person.setAge(111);
+        person.setAge(24);
         person.setTitle("reader");
-        person.setFullName("Test Test");
+        person.setFullName("Evgeniy");
 
         //When
         Person result = userRepository.save(person);
 
         //Then
-        assertThat(result.getAge()).isEqualTo(111);
+        assertThat(result.getAge()).isEqualTo(24);
         assertSelectCount(1);
         assertInsertCount(0);
         assertUpdateCount(0);
