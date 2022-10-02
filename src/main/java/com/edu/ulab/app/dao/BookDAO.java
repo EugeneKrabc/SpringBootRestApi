@@ -35,7 +35,7 @@ public class BookDAO {
                         ps.setString(1, bookDto.getTitle());
                         ps.setString(2, bookDto.getAuthor());
                         ps.setLong(3, bookDto.getPageCount());
-                        ps.setLong(4, bookDto.getUserId());
+                        ps.setLong(4, bookDto.getPersonId());
                         return ps;
                     }
                 },
@@ -59,7 +59,7 @@ public class BookDAO {
         int amount = jdbcTemplate.update(
                 "UPDATE BOOK SET TITLE = ?, AUTHOR = ?, PAGE_COUNT = ?, USER_ID = ?, ID = ?",
                 bookDto.getTitle(), bookDto.getAuthor(), bookDto.getPageCount(),
-                bookDto.getUserId(), bookDto.getId()
+                bookDto.getPersonId(), bookDto.getId()
         );
         log.info("Update query return: {}", amount);
     }

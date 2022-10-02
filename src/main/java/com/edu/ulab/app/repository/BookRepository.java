@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
-    @Query(value = "SELECT ID from Book WHERE USER_ID = ?1",
+    @Query(value = "SELECT ID from ulab_edu.book WHERE person_id = ?1",
             nativeQuery = true)
     Collection<Long> getBookIdListWithUserId(Long userId);
 
     @Transactional
-    void deleteByUserId(Long userId);
+    void deleteByPersonId(Long personId);
 }

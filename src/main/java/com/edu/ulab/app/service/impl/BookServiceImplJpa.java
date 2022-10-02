@@ -61,6 +61,6 @@ public class BookServiceImplJpa implements BookService {
     }
 
     public void deleteBooksWithUserId(Long userId) {
-        bookRepository.deleteByUserId(userId);
+        bookRepository.deleteByPersonId(userId);
     }
 }

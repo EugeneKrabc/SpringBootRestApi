@@ -41,14 +41,14 @@ public class BookServiceImplTest {
         person.setId(1L);
 
         BookDto bookDto = new BookDto();
-        bookDto.setUserId(1L);
+        bookDto.setPersonId(1L);
         bookDto.setAuthor("test author");
         bookDto.setTitle("test title");
         bookDto.setPageCount(1000);
 
         BookDto result = new BookDto();
         result.setId(1L);
-        result.setUserId(1L);
+        result.setPersonId(1L);
         result.setAuthor("test author");
         result.setTitle("test title");
         result.setPageCount(1000);
@@ -57,14 +57,14 @@ public class BookServiceImplTest {
         book.setPageCount(1000);
         book.setTitle("test title");
         book.setAuthor("test author");
-        book.setUserId(person.getId());
+        book.setPersonId(person.getId());
 
         Book savedBook = new Book();
         savedBook.setId(1L);
         savedBook.setPageCount(1000);
         savedBook.setTitle("test title");
         savedBook.setAuthor("test author");
-        savedBook.setUserId(person.getId());
+        savedBook.setPersonId(person.getId());
 
         //when
 
