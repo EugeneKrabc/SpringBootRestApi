@@ -1,4 +1,4 @@
 DELETE
-FROM person;
+FROM ulab_edu.person;
 DELETE
-FROM book;
+FROM ulab_edu.book;

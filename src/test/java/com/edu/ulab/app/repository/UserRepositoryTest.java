@@ -43,14 +43,14 @@ public class UserRepositoryTest {
         person.setFullName("Evgeniy");
 
         //When
-        Person result = userRepository.save(person);
+        Person result = userRepository.saveAndFlush(person);
 
         //Then
         assertThat(result.getAge()).isEqualTo(24);
-        assertThat(result.getFullName().equals("Evgeniy"));
-        assertThat(result.getTitle().equals("reader"));
-        assertThat(result.getId() == 1);
-        assertSelectCount(0);
+        assertThat(result.getFullName()).isEqualTo("Evgeniy");
+        assertThat(result.getTitle()).isEqualTo("reader");
+        assertThat(result.getId()).isEqualTo(100);
+        assertSelectCount(1);
         assertInsertCount(1);
         assertUpdateCount(0);
         assertDeleteCount(0);
@@ -72,11 +72,12 @@ public class UserRepositoryTest {
         Person nonExistentPerson = userRepository.findById(nonExistentId).orElse(null);
 
         //Then
-        assertThat(existentPerson.getId().equals(existentId));
-        assertThat(existentPerson.getFullName().equals("Test User"));
-        assertThat(existentPerson.getTitle().equals("Tester"));
-        assertThat(existentPerson.getAge() == 21);
-        assertThat(nonExistentPerson == null);
+        assertThat(existentPerson).isNotNull();
+        assertThat(existentPerson.getId()).isEqualTo(existentId);
+        assertThat(existentPerson.getFullName()).isEqualTo("Test User");
+        assertThat(existentPerson.getTitle()).isEqualTo("Tester");
+        assertThat(existentPerson.getAge()).isEqualTo(21);
+        assertThat(nonExistentPerson).isNull();
         assertSelectCount(2);
         assertInsertCount(0);
         assertUpdateCount(0);
@@ -99,7 +100,7 @@ public class UserRepositoryTest {
         Person deletedPerson = userRepository.findById(userId).orElse(null);
 
         //Then
-        assertThat(deletedPerson == null);
+        assertThat(deletedPerson).isNull();
         assertSelectCount(1);
         assertInsertCount(0);
         assertUpdateCount(0);
@@ -123,16 +124,17 @@ public class UserRepositoryTest {
         updatedPerson.setAge(99);
 
         //When
-        userRepository.save(updatedPerson);
+        userRepository.saveAndFlush(updatedPerson);
         Person receivedPerson = userRepository.findById(existentUserId).orElse(null);
 
         //Then
-        assertThat(receivedPerson.getAge() == 99);
-        assertThat(receivedPerson.getTitle().equals("updater"));
-        assertThat(receivedPerson.getFullName().equals("Updated User"));
+        assertThat(receivedPerson).isNotNull();
+        assertThat(receivedPerson.getAge()).isEqualTo(99);
+        assertThat(receivedPerson.getTitle()).isEqualTo("updater");
+        assertThat(receivedPerson.getFullName()).isEqualTo("Updated User");
         assertSelectCount(1);
         assertInsertCount(0);
-        assertUpdateCount(0);
+        assertUpdateCount(1);
         assertDeleteCount(0);
     }
     // update
