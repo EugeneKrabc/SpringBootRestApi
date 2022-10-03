@@ -10,11 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
@@ -204,11 +206,28 @@ public class UserServiceImplTest {
 
     }
 
-    // * failed
-    //         doThrow(dataInvalidException).when(testRepository)
-    //                .save(same(test));
-    // example failed
-    //  assertThatThrownBy(() -> testeService.createTest(testRequest))
-    //                .isInstanceOf(DataInvalidException.class)
-    //                .hasMessage("Invalid data set");
+    @Test
+    @DisplayName("Сохранение пользователя с неуникальной должностью, должно выброситься исключение.")
+    void saveUserWithNonUniqueTitleThenException_test() {
+        UserDto userDto = new UserDto();
+        userDto.setAge(11);
+        userDto.setFullName("test name");
+        userDto.setTitle("Non-unique title");
+
+        Person person  = new Person();
+        person.setFullName("test name");
+        person.setAge(11);
+        person.setTitle("Non-unique title");
+
+        //When
+
+        when(userMapper.userDtoToPerson(userDto)).thenReturn(person);
+        when(userRepository.save(person)).thenThrow(DataIntegrityViolationException.class);
+
+        //Then
+
+        assertThatThrownBy(()-> userService.createUser(userDto))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
 }

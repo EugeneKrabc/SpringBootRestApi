@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -217,6 +219,33 @@ public class BookServiceImplTest {
         BookDto resultDto = bookService.getBookById(updatedBookDto.getId());
         assertEquals(updatedBookDto.getId(), resultDto.getId());
         assertEquals(updatedBookDto.getTitle(), resultDto.getTitle());
+    }
+
+    @Test
+    @DisplayName("Сохранение книги с null полями, должно выброситься исключение.")
+    void saveBookWithNullColumnsThenException_test() {
+        //given
+        BookDto bookDto = new BookDto();
+        bookDto.setPersonId(null);
+        bookDto.setAuthor(null);
+        bookDto.setTitle(null);
+        bookDto.setPageCount(-1000);
+
+        Book book = new Book();
+        book.setPageCount(-1000);
+        book.setTitle(null);
+        book.setAuthor(null);
+        book.setPersonId(null);
+
+        //when
+
+        when(bookMapper.bookDtoToBook(bookDto)).thenReturn(book);
+        when(bookRepository.save(book)).thenThrow(DataIntegrityViolationException.class);
+
+        //then
+
+        assertThatThrownBy(()-> bookService.createBook(bookDto))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
 }

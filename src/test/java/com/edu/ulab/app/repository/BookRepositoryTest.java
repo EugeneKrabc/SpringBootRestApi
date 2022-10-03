@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static com.vladmihalcea.sql.SQLStatementCountValidator.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Тесты репозитория {@link BookRepository}.
@@ -55,7 +57,7 @@ public class BookRepositoryTest {
         //Then
         assertThat(result.getPageCount()).isEqualTo(1000);
         assertThat(result.getTitle()).isEqualTo("test");
-        assertThat(result.getId()).isEqualTo(100);
+        assertThat(result.getId()).isEqualTo(1);
         assertSelectCount(1);
         assertInsertCount(1);
         assertUpdateCount(0);
@@ -186,5 +188,26 @@ public class BookRepositoryTest {
         assertInsertCount(0);
         assertUpdateCount(0);
         assertDeleteCount(2);
+    }
+
+    @DisplayName("Сохранить книгу c null полями, должно выброситься исключение.")
+    @Test
+    @Rollback
+    @Sql({"classpath:sql/1_clear_schema.sql",
+            "classpath:sql/2_insert_person_data.sql",
+            "classpath:sql/3_insert_book_data.sql"
+    })
+    void saveBookWithNullColumnThanException_test() {
+        //Given
+        Long personId = 1001L;
+
+        Book book = new Book();
+        book.setAuthor(null);
+        book.setTitle(null);
+        book.setPageCount(1000);
+        book.setPersonId(personId);
+
+        assertThatThrownBy(()-> bookRepository.saveAndFlush(book))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }
