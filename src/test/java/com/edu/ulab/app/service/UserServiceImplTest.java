@@ -195,6 +195,7 @@ public class UserServiceImplTest {
         when(userRepository.save(personToSave)).thenReturn(savedPerson);
         when(userMapper.personToUserDto(savedPerson)).thenReturn(savedUserDto);
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        when(userMapper.personToUserDto(null)).thenReturn(null);
 
         //Then
         userService.createUser(userDtoToSave);
@@ -202,11 +203,6 @@ public class UserServiceImplTest {
         assertNull(userService.getUserById(1L));
 
     }
-
-    // update
-    // get
-    // get all
-    // delete
 
     // * failed
     //         doThrow(dataInvalidException).when(testRepository)

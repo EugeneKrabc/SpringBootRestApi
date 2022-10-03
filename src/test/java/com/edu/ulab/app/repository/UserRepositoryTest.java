@@ -28,7 +28,7 @@ public class UserRepositoryTest {
         SQLStatementCountValidator.reset();
     }
 
-    @DisplayName("Сохранить юзера. Число select должно равняться 1")
+    @DisplayName("Сохранить юзера в бд.")
     @Test
     @Rollback
     @Sql({"classpath:sql/1_clear_schema.sql",
@@ -49,7 +49,6 @@ public class UserRepositoryTest {
         assertThat(result.getAge()).isEqualTo(24);
         assertThat(result.getFullName()).isEqualTo("Evgeniy");
         assertThat(result.getTitle()).isEqualTo("reader");
-        assertThat(result.getId()).isEqualTo(100);
         assertSelectCount(1);
         assertInsertCount(1);
         assertUpdateCount(0);
