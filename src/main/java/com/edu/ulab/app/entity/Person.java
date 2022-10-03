@@ -20,7 +20,13 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     @SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 100)
     private Long id;
+
+    @Column(nullable = false)
     private String fullName;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private int age;
 }
