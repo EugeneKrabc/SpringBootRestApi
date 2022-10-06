@@ -1,0 +1,1 @@
+alter table ulab_edu.book add count integer default 1;
